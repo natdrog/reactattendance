@@ -1,0 +1,15 @@
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: #f8f9fa;
+}
+#descnote {
+  opacity: 0.5;
+}
+#slackForm {
+  padding: 2%;
+  border-radius: 7px;
+  border-width: 1px;
+  border-style: solid;
+  background-color: #fff;
+}
