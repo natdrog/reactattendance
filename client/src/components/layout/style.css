@@ -13,3 +13,19 @@ body {
   border-style: solid;
   background-color: #fff;
 }
+#slider {
+  width: 100vw;
+  height: 100vh;
+  background-color: #808080;
+}
+#header {
+  padding-top: 2vh;
+  font-size: 20px;
+}
+#about {
+  height: 60vh;
+  padding-top: 8vh;
+}
+#abt-img {
+  margin-top: 2vh;
+}
