@@ -25,7 +25,29 @@ body {
 #about {
   height: 60vh;
   padding-top: 8vh;
+  background-color: #fff;
 }
 #abt-img {
   margin-top: 2vh;
+}
+#faq {
+}
+h1 {
+  font-size: 48px;
+}
+.section-title {
+  margin-bottom: 5vh;
+}
+.question {
+  margin-bottom: 4vh;
+}
+#login {
+  height: 30vh;
+  background-color: #fff;
+  padding-top: 12vh;
+}
+#footer {
+  height: 20vh;
+  background-color: #212529;
+  color: #fff;
 }

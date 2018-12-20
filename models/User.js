@@ -4,24 +4,31 @@ const Schema = mongoose.Schema;
 // Create Schema
 const UserSchema = new Schema({
   name: {
-    type: String,
-    required: true
+    firstName: String,
+    lastName: String
   },
   email: {
     type: String,
     required: true
   },
-  password: {
+  slack_ID: {
     type: String,
     required: true
   },
-  avatar: {
-    type: String
+  rank: {
+    type: Number,
+    required: true,
+    default: "0"
   },
-  date: {
+  primary_dojo: {
+    type: Schema.Types.ObjectId,
+    ref: "Dojo",
+    required: false
+  },
+  birthday: {
     type: Date,
-    default: Date.now
+    required: false
   }
 });
 
-module.exports = User = mongoose.model("users", UserSchema);
+module.exports = User = mongoose.model("User", UserSchema);

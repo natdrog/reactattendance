@@ -1,0 +1,125 @@
+/*
+   * Sidebar
+   */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  background-color: #393e46;
+}
+body {
+  background-color: #eeeeee;
+  color: #222831;
+}
+
+.side {
+  color: #eeeeee;
+}
+.item {
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 12px;
+  border-color: #bfbfbf;
+  color: #2c302c;
+}
+.room {
+  margin-top: 6px;
+  margin-bottom: 6px;
+  margin-left: 6px;
+}
+.list {
+  background-color: #efefef;
+}
+
+/* Sidebar navigation */
+.sidebar {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar .nav {
+  margin-bottom: 20px;
+}
+
+.sidebar .nav-item {
+  width: 100%;
+}
+
+.sidebar .nav-item + .nav-item {
+  margin-left: 0;
+}
+
+.sidebar .nav-link {
+  border-radius: 0;
+}
+.active {
+  background-color: #0092ca !important;
+}
+.navbar-brand {
+  padding-left: 2vw;
+  padding-bottom: 1vh;
+  padding-top: 0vh;
+  margin-top: -1vh;
+}
+.nav-link:hover {
+  color: #0092ca;
+}
+
+/*
+   * Main Page
+  */
+
+.headcount {
+  text-align: center;
+}
+.amt {
+  background-color: #f2f2f2;
+  border-style: solid;
+  border-color: #dee2e6;
+}
+
+/* Font Awesome Media Queries */
+@media screen and (max-width: 299px) {
+  .fa-users {
+    font-size: 1.2em;
+  }
+}
+
+@media screen and (min-width: 300px) and (max-width: 799px) {
+  .fa-users {
+    font-size: 2em;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .fa-users {
+    font-size: 4em;
+  }
+}
+
+.box {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  margin: 2vh 0.5vw;
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  border-width: 2px;
+  border-color: black;
+  border-style: solid;
+  margin-bottom: 2vh;
+  line-height: 100px;
+  text-align: center;
+}
+.attended {
+  background-color: white;
+  border-width: 2px;
+  border-color: black;
+  border-style: solid;
+}

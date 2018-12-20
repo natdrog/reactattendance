@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import "./style.css";
+import axios from "axios";
 
 class Login extends Component {
   constructor() {
@@ -20,10 +22,12 @@ class Login extends Component {
     };
 
     console.log(code);
+    axios.post("./dashboard/login", code);
   }
 
   onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+    console.log(e);
+    this.setState({ code: e.target.value });
   }
 
   render() {
@@ -52,7 +56,6 @@ class Login extends Component {
             <button type="submit" className="btn btn-primary" id="submitBtn">
               Submit
             </button>
-            <h3>Or</h3>
           </form>
         </div>
       </div>

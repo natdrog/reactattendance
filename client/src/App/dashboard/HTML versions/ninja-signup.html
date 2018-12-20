@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <title>Dashboard</title>
+    <!-- Bootstrap -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" type="text/css" href="css/signup.css" />
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4 offset-md-4 box">
+          <h1 class="title display-4">Ninja Sign Up</h1>
+          <form onSubmit="{this.onSubmit}" className="p-3">
+            <div class="form-group">
+              <label htmlFor="first_name"
+                >First Name<a class="asterisk">*</a></label
+              >
+              <input
+                type="first_name"
+                name="first_name"
+                class="form-control"
+                id="first-name-input"
+                placeholder=""
+                value=""
+                onChange="{this.onChange}"
+              />
+            </div>
+            <div class="form-group">
+              <label htmlFor="last_name"
+                >Last Name<a class="asterisk">*</a></label
+              >
+              <input
+                type="last_name"
+                name="last_name"
+                class="form-control"
+                id="last-name-input"
+                placeholder=""
+                value=""
+                onChange="{this.onChange}"
+              />
+            </div>
+            <div class="form-group">
+              <label htmlFor="primary_dojo"
+                >Primary Dojo<a class="asterisk">*</a></label
+              >
+              <select class="form-control" id="primary_dojo">
+                <option value="toledo">Toledo</option>
+                <option value="example">Example Dojo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label htmlFor="month">Birthday<a class="asterisk">*</a></label>
+              <input
+                type="date"
+                name="date"
+                class="form-control"
+                id="date-input"
+                placeholder=""
+                value=""
+                onChange="{this.onChange}"
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <p class="note font-weight-light font-italic">
+            <a class="asterisk">*</a>denotes required field
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

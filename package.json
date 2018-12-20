@@ -1,10 +1,10 @@
 {
-  "name": "devconnector",
+  "name": "reactattendance",
   "version": "1.0.0",
-  "description": "Social network for devs",
+  "description": "Coderdojo attendance program built in react",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "concurrently \"node server.js\" \"lt --port 5000 --subdomain cdattendance\"",
     "server": "nodemon server.js",
     "client-install": "npm install --prefix client",
     "client": "npm start --prefix client",
@@ -15,10 +15,16 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "concurrently": "^4.0.0",
-    "express": "^4.16.3",
-    "gravatar": "^1.6.0",
+    "date-and-time": "^0.6.3",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.4",
+    "passport": "^0.4.0",
+    "passport-slack": "0.0.7",
+    "react-redux": "^5.1.0",
+    "redux": "^4.0.1",
     "validator": "^10.4.0"
   },
   "devDependencies": {
