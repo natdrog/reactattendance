@@ -1,32 +1,31 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-
-// Create Schema
-const DojoSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  street_address: {
-    type: String,
-    required: true
-  },
-  city: {
-    type: String,
-    required: true
-  },
-  state: {
-    type: String,
-    required: true
-  },
-  zip: {
-    type: Number,
-    required: true
-  },
-  owner_email: {
-    type: String,
-    required: false
-  }
-});
-
-module.exports = User = mongoose.model("Dojo", DojoSchema);
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define("Dojo", {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    street_address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    zip: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    owner_email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isEmail: true
+      }
+    }
+  });
+};

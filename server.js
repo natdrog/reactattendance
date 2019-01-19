@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
+const Sequelize = require("sequelize");
 const app = express();
 const SlackStrategy = require("passport-slack").Strategy;
 // Import Functions
@@ -10,7 +10,7 @@ const dojoCreate = require("./misc/dojo_create");
 const codeCreate = require("./misc/code_create");
 const relationshipCreate = require("./misc/relationship_create");
 // Import Database
-const User = require("./models/User");
+//const User = require("./models/User");
 // Import Routes
 const dashboard = require("./routes/api/dashboard");
 const signup = require("./routes/api/signup");
@@ -30,7 +30,7 @@ passport.use(
     }
   )
 );
-passport.serializeUser(function(user, done) {
+/*passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
@@ -40,6 +40,7 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
+*/
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -47,23 +48,24 @@ app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// DB Config
-const db = require("./config/keys").mongoURI;
+// Connect to Database
+const sequelize = new Sequelize(
+  "postgres://dev:password@localhost:5432/reactattendance"
+);
 
-//Connect to MongoDB
-mongoose
-  .connect(
-    db,
-    { useNewUrlParser: true }
-  )
+sequelize
+  .authenticate()
   .then(() => {
-    console.log("MongoDB Connected");
+    console.log("Connection has been established successfully.");
   })
-  .catch(err => console.log(err));
+  .catch(err => {
+    console.error("Unable to connect to the database:", err);
+  });
 
-app.post("/test", (req, res) => {
-  res.end("Post worked!");
-});
+// Import Database Tables
+const User = require("./models/User").User;
+const WeekCode = require("./models/Week_code").WeekCode;
+const Dojo = require("./models/Dojo").Dojo;
 
 // Use Routes
 app.use("/api/dashboard", dashboard);

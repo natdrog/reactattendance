@@ -1,34 +1,29 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-
-// Create Schema
-const UserSchema = new Schema({
-  name: {
-    firstName: String,
-    lastName: String
-  },
-  email: {
-    type: String,
-    required: true
-  },
-  slack_ID: {
-    type: String,
-    required: true
-  },
-  rank: {
-    type: Number,
-    required: true,
-    default: "0"
-  },
-  primary_dojo: {
-    type: Schema.Types.ObjectId,
-    ref: "Dojo",
-    required: false
-  },
-  birthday: {
-    type: Date,
-    required: false
-  }
-});
-
-module.exports = User = mongoose.model("User", UserSchema);
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define("User", {
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isEmail: true
+      }
+    },
+    slack_ID: {
+      type: DataTypes.STRING
+    },
+    rank: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    birthday: {
+      type: DataTypes.DATE
+    }
+  });
+};
