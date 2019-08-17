@@ -1,5 +1,5 @@
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define("User", {
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define("User", {
     firstName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -15,15 +15,23 @@ module.exports = function(sequelize, DataTypes) {
         isEmail: true
       }
     },
-    slack_ID: {
+    slackID: {
       type: DataTypes.STRING
     },
     rank: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    position: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     birthday: {
-      type: DataTypes.DATE
+      type: DataTypes.DATEONLY
     }
   });
+  User.associate = models => {
+    models.User.belongsTo(models.Dojo, { as: "primaryDojo" });
+  };
+  return User;
 };

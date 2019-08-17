@@ -1,14 +1,20 @@
 let defaultState = {
-  first_name: "",
-  last_name: ""
+  firstName: "",
+  lastName: "",
+  rank: 0,
+  userID: ""
 };
 
 const userReducer = (state = defaultState, action) => {
   switch (action.type) {
     case "SET_FIRST_NAME":
-      return { ...state, first_name: action.payload };
+      return { ...state, firstName: action.payload };
     case "SET_LAST_NAME":
-      return { ...state, last_name: action.payload };
+      return { ...state, lastName: action.payload };
+    case "SET_RANK":
+      return { ...state, rank: action.payload };
+    case "SET_USER_ID":
+      return { ...state, userID: action.payload };
     default:
       return state;
   }

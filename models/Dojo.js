@@ -1,10 +1,10 @@
-module.exports = function(sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
   return sequelize.define("Dojo", {
     name: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    street_address: {
+    streetAddress: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    owner_email: {
+    ownerEmail: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {

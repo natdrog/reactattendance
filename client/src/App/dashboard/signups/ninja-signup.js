@@ -6,10 +6,10 @@ class NinjaSignup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      first_name: "",
-      last_name: "",
+      firstName: "",
+      lastName: "",
       email: "",
-      primary_dojo: "toledo",
+      primaryDojoId: "1",
       birthday: "",
       err: false,
       errtxt: ""
@@ -31,14 +31,13 @@ class NinjaSignup extends Component {
     axios
       .post("/api/signup/createUser", {
         user: {
-          name: {
-            firstName: this.state.first_name,
-            lastName: this.state.last_name
-          },
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
           rank: "1",
           email: this.state.email,
-          primary_dojo: "5bb8ea267f5a39d31927fd56",
-          birthday: this.state.birthday
+          primary_dojo: "1",
+          birthday: this.state.birthday,
+          position: "ninja"
         },
         token: sessionStorage.getItem("id")
       })
@@ -63,11 +62,11 @@ class NinjaSignup extends Component {
                   First Name<a className="asterisk">*</a>
                 </label>
                 <input
-                  type="first_name"
-                  name="first_name"
+                  type="firstName"
+                  name="firstName"
                   className="form-control"
                   id="first-name-input"
-                  value={this.state.first_name}
+                  value={this.state.firstName}
                   onChange={this.onChange}
                 />
               </div>
@@ -76,11 +75,11 @@ class NinjaSignup extends Component {
                   Last Name<a className="asterisk">*</a>
                 </label>
                 <input
-                  type="last_name"
-                  name="last_name"
+                  type="lastName"
+                  name="lastName"
                   className="form-control"
                   id="last-name-input"
-                  value={this.state.last_name}
+                  value={this.state.lastName}
                   onChange={this.onChange}
                 />
               </div>
@@ -104,12 +103,12 @@ class NinjaSignup extends Component {
                 <select
                   name="primary_dojo"
                   className="form-control"
-                  value={this.state.primary_dojo}
+                  value={this.state.primaryDojoId}
                   onChange={this.onChange}
                   id="primary_dojo"
                 >
-                  <option value="toledo">Toledo</option>
-                  <option value="example">Example Dojo</option>
+                  <option value="1">Toledo</option>
+                  <option value="2">Example Dojo</option>
                 </select>
               </div>
               <div className="form-group">

@@ -84,6 +84,10 @@ body {
   border-color: #dee2e6;
 }
 
+.dashcomp {
+  margin-bottom: 5vh;
+}
+
 /* Font Awesome Media Queries */
 @media screen and (max-width: 299px) {
   .fa-users {

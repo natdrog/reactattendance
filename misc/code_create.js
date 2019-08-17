@@ -1,14 +1,7 @@
-const Week_Code = require("../models/Week_Code");
 const date = require("date-and-time");
 
 var now = new Date();
 date.format(now, "YYYY-MM-DD");
-
-var codeInfo = {
-  date: now,
-  dojo_ID: "5bb8ea267f5a39d31927fd56",
-  code: genEventCode()
-};
 
 //Generate event code.
 function genEventCode() {
@@ -24,7 +17,11 @@ function genEventCode() {
   );
 }
 
-module.exports.createCode = () => {
+module.exports.createCode = dojoID => {
+  var codeInfo = {
+    date: now,
+    dojoID,
+    code: genEventCode()
+  };
   const WeekCode = new Week_Code(codeInfo);
-  WeekCode.save();
 };

@@ -3,17 +3,28 @@ import { connect } from "react-redux";
 import Sidebar from "./components/sidebar";
 import LoginCard from "./components/cards/login";
 import AttendanceHistoryCard from "./components/cards/attendance-history";
-import { setFirstName, setLastName } from "../actions/user-actions";
+import AttendanceCode from "./components/cards/attend-code";
+import {
+  setFirstName,
+  setLastName,
+  setRank,
+  setUserID
+} from "../actions/user-actions";
 import axios from "axios";
 import "./resources/style.css";
-
+import permissions from "./permissions";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      weekCode: ""
+    };
     this.getInfo = this.getInfo.bind(this);
-    if (this.props.user.first_name === "") {
+    this.getAttendCode = this.getAttendCode.bind(this);
+    if (this.props.user.firstName === "") {
       this.getInfo();
     }
+    this.getAttendCode();
   }
 
   getInfo() {
@@ -23,36 +34,65 @@ class Dashboard extends Component {
       })
       .then(res => {
         var info = res.data;
-        console.log(info);
         if (info !== false) {
-          this.onSetFirstName(info.name.firstName);
-          this.onSetLastName(info.name.lastName);
+          this.onSetFirstName(info.firstName);
+          this.onSetLastName(info.lastName);
+          this.onSetRank(info.position);
+          this.onSetUserID(info.id);
         }
       });
   }
 
-  onSetFirstName(first_name) {
-    this.props.onSetFirstName(first_name);
+  getAttendCode() {
+    axios
+      .post("/api/attendance/getWeekCode", {
+        token: sessionStorage.getItem("id")
+      })
+      .then(res => {
+        var info = res.data;
+        if (info !== false) {
+          this.setState({ ...this.state, weekCode: info.code });
+        }
+      });
   }
-  onSetLastName(last_name) {
-    this.props.onSetLastName(last_name);
+
+  onSetFirstName(firstName) {
+    this.props.onSetFirstName(firstName);
+  }
+  onSetLastName(lastName) {
+    this.props.onSetLastName(lastName);
+  }
+  onSetRank(rank) {
+    this.props.onSetRank(rank);
+  }
+  onSetUserID(userID) {
+    this.props.onSetUserID(userID);
   }
 
   render() {
     return (
       <div className="container-fluid">
-        <Sidebar />
+        <Sidebar active="dashboard" />
         <main className="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
-          <h1>Welcome {this.props.user.first_name}!</h1>
+          <h1>Welcome {this.props.user.firstName}!</h1>
           <hr />
           <div className="container-fluid">
             <div className="row">
-              <div className="col-md">
-                <LoginCard />
-              </div>
-              <div className="col-md">
-                <AttendanceHistoryCard />
-              </div>
+              {permissions.canSignIn.includes(this.props.user.rank) ? (
+                <div className="col-md-6 dashcomp">
+                  <LoginCard />
+                </div>
+              ) : null}
+              {permissions.canSignIn.includes(this.props.user.rank) ? (
+                <div className="col-md-6 dashcomp">
+                  <AttendanceHistoryCard />
+                </div>
+              ) : null}
+              {permissions.canSeeWeekCode.includes(this.props.user.rank) ? (
+                <div className="col-md-6 dashcomp">
+                  <AttendanceCode code={this.state.weekCode} />
+                </div>
+              ) : null}
             </div>
           </div>
         </main>
@@ -66,7 +106,9 @@ const mapStateToProps = state => {
 };
 const mapActionsToProps = {
   onSetFirstName: setFirstName,
-  onSetLastName: setLastName
+  onSetLastName: setLastName,
+  onSetRank: setRank,
+  onSetUserID: setUserID
 };
 
 export default connect(

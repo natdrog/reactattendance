@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const User = require("../../models/User");
+const db = require("../../models/db");
 
 router.post("/createUser", async (req, res) => {
   token = await checkToken(req.body.token);
@@ -11,7 +11,20 @@ router.post("/createUser", async (req, res) => {
     res.end({ success: "false", err: "Token is undefined", errno: "0" });
   } else {
     user.slack_ID = token;
-    //console.log(user);
+    console.log(user);
+    db.User.findOrCreate({
+      where: { slackID: user.slack_ID },
+      defaults: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        rank: user.rank,
+        birthday: user.birthday,
+        position: user.position
+      }
+    }).then(createdUser => {
+      console.log(createdUser);
+    });
     User.findOne({ slack_ID: user.slack_ID }).then(check => {
       if (check !== null) {
         console.log("Slack in Use");
