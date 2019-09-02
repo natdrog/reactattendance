@@ -1,0 +1,19 @@
+<svg width="103.57" height="103.57" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style>.e2f6ed01-f671-4df5-aebb-dffc392d99b3 {
+        fill: #202528;
+      }</style>
+ </defs>
+ <title>cdt-logo-c-symbol</title>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="105.57" width="105.57" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <g id="svg_1">
+   <path id="svg_2" d="m42.699913,25.865004c0,-6.64 2,-11.9 8.36,-11.9s8.36,5.26 8.36,11.9s-2,12 -8.36,12s-8.36,-5.37 -8.36,-12zm12.43,0c0,-4.49 -0.91,-8 -4.07,-8s-4.06,3.54 -4.06,8s0.91,8.14 4.06,8.14s4.11,-3.59 4.11,-8.14l-0.04,0z" class="e2f6ed01-f671-4df5-aebb-dffc392d99b3"/>
+   <path id="svg_3" d="m51.059913,0.005004a25.89,25.89 0 0 1 0,51.78a25.9,25.9 0 0 0 0,51.79a51.79,51.79 0 1 0 0,-103.57zm6.69,89.22l-11.76,0l0,-3.61l3.75,0l0,-14.06l-3,1.74l-2.37,-3.51l5.8,-3.65l3.84,0l0,19.48l3.75,0l-0.01,3.61z" class="e2f6ed01-f671-4df5-aebb-dffc392d99b3"/>
+  </g>
+ </g>
+</svg>

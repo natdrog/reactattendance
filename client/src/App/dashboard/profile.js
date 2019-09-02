@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Loading from "./components/misc/loading";
 import Sidebar from "./components/sidebar";
 import UserAttend from "./components/cards/user-attend";
 import placeholder from "./resources/profile.svg";
 import axios from "axios";
 
 class Profile extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -13,9 +16,20 @@ class Profile extends Component {
       user: [],
       relationships: []
     };
+    if (window.performance) {
+      if (performance.navigation.type === 1 && this.props.user.userID === "") {
+        this.props.history.push("/dashboard");
+      }
+    }
     this.getUser = this.getUser.bind(this);
-    this.getUser();
     this.calculateAge = this.calculateAge.bind(this);
+  }
+  componentDidMount() {
+    this._isMounted = true;
+    this.getUser();
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   redirect(id) {
@@ -31,7 +45,7 @@ class Profile extends Component {
       })
       .then(res => {
         var user = res.data;
-        if (user.success === true) {
+        if (user.success === true && this._isMounted === true) {
           this.setState({
             ...this.state,
             user: user.user
@@ -55,57 +69,56 @@ class Profile extends Component {
   }
 
   render() {
-    console.log(this.props);
-    return (
-      <div className="container-fluid">
-        {this.props.user.id === this.state.info.id ? (
-          <Sidebar active="profile" />
-        ) : (
-          <Sidebar active="ninjas" />
-        )}
-        <main className="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
-          <h1>Profile:</h1>
-          <hr />
-          <div className="container">
-            <div className="row">
-              <img alt="" src={placeholder} />
-              <div>
-                <h3>{`${this.state.user.firstName} ${
-                  this.state.user.lastName
-                }`}</h3>
-                <h4>Age: {this.calculateAge(this.state.user.birthday)}</h4>
-              </div>
-            </div>
+    if (this.state.user.id === undefined) {
+      return <Loading />;
+    } else {
+      return (
+        <div className="container-fluid">
+          {this.props.user.userID === this.state.user.id ? (
+            <Sidebar active="profile" />
+          ) : (
+            <Sidebar active="ninjas" />
+          )}
+          <main className="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+            <h1>Profile:</h1>
             <hr />
-            <h2>Relationships:</h2>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Relationship</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.relationships.map(rel => (
-                  <tr
-                    onClick={() => this.redirect(rel.person2.id)}
-                    key={rel.person2.id}
-                  >
-                    <th scope="row">{rel.person2.id}</th>
-                    <td>{`${rel.person2.firstName} ${
-                      rel.person2.lastName
-                    }`}</td>
-                    <td>{rel.relationTo}</td>
+            <div className="container">
+              <div className="row">
+                <img alt="" src={placeholder} />
+                <div>
+                  <h3>{`${this.state.user.firstName} ${this.state.user.lastName}`}</h3>
+                  <h4>Age: {this.calculateAge(this.state.user.birthday)}</h4>
+                </div>
+              </div>
+              <hr />
+              <h2>Relationships:</h2>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Relationship</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <UserAttend id={this.props.match.params.id} />
-        </main>
-      </div>
-    );
+                </thead>
+                <tbody>
+                  {this.state.relationships.map(rel => (
+                    <tr
+                      onClick={() => this.redirect(rel.person2.id)}
+                      key={rel.person2.id}
+                    >
+                      <th scope="row">{rel.person2.id}</th>
+                      <td>{`${rel.person2.firstName} ${rel.person2.lastName}`}</td>
+                      <td>{rel.relationTo}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <UserAttend id={this.props.match.params.id} />
+          </main>
+        </div>
+      );
+    }
   }
 }
 

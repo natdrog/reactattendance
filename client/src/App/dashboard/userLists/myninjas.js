@@ -4,41 +4,41 @@ import Loading from "../components/misc/loading";
 import Sidebar from "../components/sidebar";
 import axios from "axios";
 
-class Mentors extends Component {
+class MyNinjas extends Component {
   _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
-      mentors: []
+      ninjas: []
     };
     if (window.performance) {
       if (performance.navigation.type === 1 && this.props.user.userID === "") {
         this.props.history.push("/dashboard");
       }
     }
-    this.getMentors = this.getMentors.bind(this);
+    this.getNinjas = this.getNinjas.bind(this);
     this.redirect = this.redirect.bind(this);
   }
 
   componentDidMount() {
     this._isMounted = true;
-    this.getMentors();
+    this.getNinjas();
   }
   componentWillUnmount() {
     this._isMounted = false;
   }
 
-  getMentors() {
+  getNinjas() {
     axios
       .post("/api/dashboard/getList", {
         token: sessionStorage.getItem("id"),
-        position: "mentor"
+        position: "ninja"
       })
       .then(res => {
-        var mentors = res.data;
-        if (mentors.success === true && this._isMounted === true) {
-          mentors.users.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
-          this.setState({ ...this.state, mentors: mentors.users });
+        var ninjas = res.data;
+        if (ninjas.success === true && this._isMounted === true) {
+          ninjas.users.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
+          this.setState({ ...this.state, ninjas: ninjas.users });
         }
       });
   }
@@ -47,14 +47,14 @@ class Mentors extends Component {
   }
 
   render() {
-    if (!this.state.mentors.length) {
+    if (!this.state.ninjas.length) {
       return <Loading />;
     } else {
       return (
         <div className="container-fluid">
-          <Sidebar active="mentors" />
+          <Sidebar active="myninjas" />
           <main className="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
-            <h1>Mentors:</h1>
+            <h1>My Ninjas:</h1>
             <hr />
             <div className="container-fluid">
               <table className="table table-hover">
@@ -66,16 +66,16 @@ class Mentors extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.mentors.map(mentor => (
+                  {this.state.ninjas.map(ninja => (
                     <tr
                       onClick={() =>
-                        this.props.history.push(`/user/${mentor.id}`)
+                        this.props.history.push(`/user/${ninja.id}`)
                       }
-                      key={mentor.id}
+                      key={ninja.id}
                     >
-                      <th scope="row">{mentor.id}</th>
-                      <td>{mentor.firstName}</td>
-                      <td>{mentor.lastName}</td>
+                      <th scope="row">{ninja.id}</th>
+                      <td>{ninja.firstName}</td>
+                      <td>{ninja.lastName}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -91,4 +91,4 @@ class Mentors extends Component {
 const mapStateToProps = state => {
   return state;
 };
-export default connect(mapStateToProps)(Mentors);
+export default connect(mapStateToProps)(MyNinjas);

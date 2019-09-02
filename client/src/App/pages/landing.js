@@ -15,7 +15,6 @@ class Home extends Component {
     }
     var query = queryString.parse(this.props.location.search);
     if (query.token) {
-      console.log(query.token);
       window.sessionStorage.setItem("id", query.token);
     }
   }
@@ -45,7 +44,7 @@ class Home extends Component {
             </div>
             <div className="col-md-1 offset-md-1 text-center">
               <a
-                href="http://888218f9.ngrok.io/api/dashboard/auth"
+                href="http://cdattendance1.localtunnel.me/api/dashboard/auth"
                 onClick={this.redirectLogin}
               >
                 <p>Login</p>

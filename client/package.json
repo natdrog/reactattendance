@@ -18,7 +18,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://888218f9.ngrok.io",
+  "proxy": "https://cdattendance1.localtunnel.me",
   "browserslist": {
     "production": [
       ">0.2%",

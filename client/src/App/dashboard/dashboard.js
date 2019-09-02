@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Loading from "./components/misc/loading";
 import Sidebar from "./components/sidebar";
 import LoginCard from "./components/cards/login";
 import AttendanceHistoryCard from "./components/cards/attendance-history";
@@ -70,34 +71,38 @@ class Dashboard extends Component {
   }
 
   render() {
-    return (
-      <div className="container-fluid">
-        <Sidebar active="dashboard" />
-        <main className="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
-          <h1>Welcome {this.props.user.firstName}!</h1>
-          <hr />
-          <div className="container-fluid">
-            <div className="row">
-              {permissions.canSignIn.includes(this.props.user.rank) ? (
-                <div className="col-md-6 dashcomp">
-                  <LoginCard />
-                </div>
-              ) : null}
-              {permissions.canSignIn.includes(this.props.user.rank) ? (
-                <div className="col-md-6 dashcomp">
-                  <AttendanceHistoryCard />
-                </div>
-              ) : null}
-              {permissions.canSeeWeekCode.includes(this.props.user.rank) ? (
-                <div className="col-md-6 dashcomp">
-                  <AttendanceCode code={this.state.weekCode} />
-                </div>
-              ) : null}
+    if (this.props.user.userID === "") {
+      return <Loading />;
+    } else {
+      return (
+        <div className="container-fluid">
+          <Sidebar active="dashboard" />
+          <main className="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+            <h1>Welcome {this.props.user.firstName}!</h1>
+            <hr />
+            <div className="container-fluid">
+              <div className="row">
+                {permissions.canSignIn.includes(this.props.user.rank) ? (
+                  <div className="col-md-6 dashcomp">
+                    <LoginCard />
+                  </div>
+                ) : null}
+                {permissions.canSignIn.includes(this.props.user.rank) ? (
+                  <div className="col-md-6 dashcomp">
+                    <AttendanceHistoryCard />
+                  </div>
+                ) : null}
+                {permissions.canSeeWeekCode.includes(this.props.user.rank) ? (
+                  <div className="col-md-6 dashcomp">
+                    <AttendanceCode code={this.state.weekCode} />
+                  </div>
+                ) : null}
+              </div>
             </div>
-          </div>
-        </main>
-      </div>
-    );
+          </main>
+        </div>
+      );
+    }
   }
 }
 

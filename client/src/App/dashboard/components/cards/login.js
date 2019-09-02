@@ -28,9 +28,7 @@ class Login extends Component {
       .then(res => {
         res = res.data;
         if (res.success === true) {
-          console.log("success");
           this.setState({ ...this.state, success: true });
-          console.log(this.state);
         }
       });
   }

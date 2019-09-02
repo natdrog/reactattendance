@@ -73,7 +73,7 @@ router.post("/getWeekCode", async (req, res) => {
     var tempcode = genEventCode();
     db.WeekCode.findOrCreate({
       where: { date: now },
-      defaults: { date: now, code: tempcode, dojoId: "1" }
+      defaults: { date: now, code: tempcode, DojoId: "1" }
     }).then(code => {
       res.end(
         `{"success": true, "code": ${JSON.stringify(code[0].dataValues.code)}}`

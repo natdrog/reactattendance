@@ -27,7 +27,6 @@ class NinjaSignup extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
     axios
       .post("/api/signup/createUser", {
         user: {
@@ -43,7 +42,6 @@ class NinjaSignup extends Component {
       })
       .then(res => {
         res = res.data;
-        console.log(res);
         if (res.success === "false") {
           this.setState({ err: true });
         }
@@ -59,6 +57,7 @@ class NinjaSignup extends Component {
             <form onSubmit={this.onSubmit} className="p-3">
               <div className="form-group">
                 <label htmlFor="first_name">
+                  {/* eslint-disable-next-line*/}
                   First Name<a className="asterisk">*</a>
                 </label>
                 <input
@@ -72,6 +71,7 @@ class NinjaSignup extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="last_name">
+                  {/* eslint-disable-next-line*/}
                   Last Name<a className="asterisk">*</a>
                 </label>
                 <input
@@ -85,6 +85,7 @@ class NinjaSignup extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="email">
+                  {/* eslint-disable-next-line*/}
                   Email<a className="asterisk">*</a>
                 </label>
                 <input
@@ -98,6 +99,7 @@ class NinjaSignup extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="primary_dojo">
+                  {/* eslint-disable-next-line*/}
                   Primary Dojo<a className="asterisk">*</a>
                 </label>
                 <select
@@ -113,6 +115,7 @@ class NinjaSignup extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="birthday">
+                  {/* eslint-disable-next-line*/}
                   Birthday<a className="asterisk">*</a>
                 </label>
                 <input
@@ -128,9 +131,6 @@ class NinjaSignup extends Component {
                 <div className="error">
                   <div className="alert alert-danger" role="alert">
                     Example test
-                    <a href="/dashboard" className="alert-link">
-                      an example link
-                    </a>
                   </div>
                 </div>
               ) : (
@@ -141,6 +141,7 @@ class NinjaSignup extends Component {
               </button>
             </form>
             <p className="note font-weight-light font-italic">
+              {/* eslint-disable-next-line*/}
               <a className="asterisk">*</a>denotes required field
             </p>
           </div>

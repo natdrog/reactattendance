@@ -19,7 +19,6 @@ class UserAttend extends Component {
       .then(res => {
         var attends = res.data;
         if (attends.success === true) {
-          console.log(attends);
           attends.attends.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
           this.setState({
             ...this.state,

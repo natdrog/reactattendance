@@ -12,7 +12,6 @@ router.get(
   passport.authenticate("slack", { failureRedirect: "http://localhost:3000" }),
   function(req, res) {
     var id = req.user.id;
-    console.log(id);
     var token = jwt.sign({ id }, process.env.JWT_SECRET);
     res.redirect("http://localhost:3000?token=" + token);
   }

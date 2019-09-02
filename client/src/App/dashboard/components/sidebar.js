@@ -96,7 +96,26 @@ class Sidebar extends Component {
               </NavLink>
             </li>
           ) : null}
-          {permissions.canSeeGuardianProfile.includes(this.props.user.rank) ? (
+
+          {permissions.canSeeMyNinjas.includes(this.props.user.rank) ? (
+            <li className="nav-item">
+              <NavLink
+                className={
+                  this.props.active === "myninjas"
+                    ? "nav-link active"
+                    : "nav-link side"
+                }
+                to="/myninjas"
+              >
+                My Ninjas
+                {this.props.active === "myninjas" ? (
+                  <span className="sr-only">(current)</span>
+                ) : null}
+              </NavLink>
+            </li>
+          ) : null}
+
+          {permissions.canSeeAnalytics.includes(this.props.user.rank) ? (
             <li className="nav-item">
               <NavLink
                 className={

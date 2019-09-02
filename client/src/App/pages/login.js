@@ -21,12 +21,10 @@ class Login extends Component {
       code: this.state.code
     };
 
-    console.log(code);
     axios.post("./dashboard/login", code);
   }
 
   onChange(e) {
-    console.log(e);
     this.setState({ code: e.target.value });
   }
 
