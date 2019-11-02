@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import variables from "../../variables";
 
 class UserAttend extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ class UserAttend extends Component {
               {this.state.attends.map(attend => (
                 <tr key={attend.id}>
                   <th scope="row">{attend.date}</th>
-                  <td>{attend.locationId}</td>
+                  <td>{variables.dojos[attend.locationId]}</td>
                 </tr>
               ))}
             </tbody>

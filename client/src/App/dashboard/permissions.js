@@ -4,7 +4,7 @@ const permissions = {
   canSeeNinjaProfile: ["mentor", "dojoManager", "multiDojoManager", "admin"],
   canSeeGuardianProfile: ["mentor", "dojoManager", "multiDojoManager", "admin"],
   canSeeMentorProfile: ["dojoManager", "multiDojoManager", "admin"],
-  canSeeMyNinjas: ["guardian", "admin"],
+  canSeeMyNinjas: ["guardian", "dojoManager", "multiDojoManager", "admin"],
   canSeeAnalytics: ["mentor", "dojoManager", "multiDojoManager", "admin"]
 };
 

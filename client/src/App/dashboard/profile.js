@@ -5,6 +5,7 @@ import Sidebar from "./components/sidebar";
 import UserAttend from "./components/cards/user-attend";
 import placeholder from "./resources/profile.svg";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 class Profile extends Component {
   _isMounted = false;
@@ -26,21 +27,25 @@ class Profile extends Component {
   }
   componentDidMount() {
     this._isMounted = true;
-    this.getUser();
+    const id = this.props.location.state;
+    this.getUser(id);
   }
   componentWillUnmount() {
     this._isMounted = false;
+  }
+  componentWillMount() {
+    this.getUser();
   }
 
   redirect(id) {
     this.props.history.push(`/user/${id}`);
   }
 
-  getUser() {
+  getUser(id) {
     axios
       .post("/api/dashboard/getUser", {
         token: sessionStorage.getItem("id"),
-        id: this.props.match.params.id,
+        id,
         relationships: true
       })
       .then(res => {
@@ -57,6 +62,7 @@ class Profile extends Component {
             ...this.state,
             relationships: user.relationships
           });
+          console.log(this.state.relationships);
         }
       });
   }
@@ -102,13 +108,15 @@ class Profile extends Component {
                 </thead>
                 <tbody>
                   {this.state.relationships.map(rel => (
-                    <tr
-                      onClick={() => this.redirect(rel.person2.id)}
-                      key={rel.person2.id}
-                    >
+                    <tr key={rel.person2.id}>
                       <th scope="row">{rel.person2.id}</th>
                       <td>{`${rel.person2.firstName} ${rel.person2.lastName}`}</td>
                       <td>{rel.relationTo}</td>
+                      <td>
+                        <Link to={`/user/${rel.person2.id}`}>
+                          <button>View Profile</button>
+                        </Link>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

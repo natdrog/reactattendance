@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   User.associate = models => {
     models.User.belongsTo(models.Dojo, { as: "primaryDojo" });
+    models.User.hasMany(models.Relationship, { foreignKey: "person1Id" });
   };
   return User;
 };

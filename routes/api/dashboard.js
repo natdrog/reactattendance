@@ -72,6 +72,31 @@ async function getRelationships(id) {
   });
 }
 
+router.post("/getMyNinjas", async (req, res) => {
+  token = await checkToken(req.body.token);
+  if (!token) {
+    res.end('{"success": false, "err": "Token is undefined"}');
+  } else {
+    db.Relationship.findAll({
+      include: [
+        {
+          model: db.User,
+          as: "person2",
+          where: { id: req.body.id },
+          attributes: []
+        },
+        { model: db.User, as: "person1" }
+      ]
+    }).then(relusr => {
+      var users = [];
+      for (i = 0; i < relusr.length; i++) {
+        users.push(relusr[i].person1);
+      }
+      res.end(`{"success": true, "users": ${JSON.stringify(users)}}`);
+    });
+  }
+});
+
 async function checkToken(token) {
   return await jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err === null) {

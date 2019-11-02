@@ -36,7 +36,12 @@ class Sidebar extends Component {
                   ? "nav-link active"
                   : "nav-link side"
               }
-              to={`/user/${this.props.user.userID}`}
+              to={{
+                pathname: "/profile",
+                state: {
+                  id: this.props.user.userID
+                }
+              }}
             >
               Profile
               {this.props.active === "profile" ? (
@@ -44,6 +49,25 @@ class Sidebar extends Component {
               ) : null}
             </NavLink>
           </li>
+
+          {permissions.canSeeMyNinjas.includes(this.props.user.rank) ? (
+            <li className="nav-item">
+              <NavLink
+                className={
+                  this.props.active === "myninjas"
+                    ? "nav-link active"
+                    : "nav-link side"
+                }
+                to="/myninjas"
+              >
+                My Ninjas
+                {this.props.active === "myninjas" ? (
+                  <span className="sr-only">(current)</span>
+                ) : null}
+              </NavLink>
+            </li>
+          ) : null}
+
           {permissions.canSeeNinjaProfile.includes(this.props.user.rank) ? (
             <li className="nav-item">
               <NavLink
@@ -56,23 +80,6 @@ class Sidebar extends Component {
               >
                 Ninjas
                 {this.props.active === "ninjas" ? (
-                  <span className="sr-only">(current)</span>
-                ) : null}
-              </NavLink>
-            </li>
-          ) : null}
-          {permissions.canSeeMentorProfile.includes(this.props.user.rank) ? (
-            <li className="nav-item">
-              <NavLink
-                className={
-                  this.props.active === "mentors"
-                    ? "nav-link active"
-                    : "nav-link side"
-                }
-                to="/mentors"
-              >
-                Mentors
-                {this.props.active === "mentors" ? (
                   <span className="sr-only">(current)</span>
                 ) : null}
               </NavLink>
@@ -97,18 +104,18 @@ class Sidebar extends Component {
             </li>
           ) : null}
 
-          {permissions.canSeeMyNinjas.includes(this.props.user.rank) ? (
+          {permissions.canSeeMentorProfile.includes(this.props.user.rank) ? (
             <li className="nav-item">
               <NavLink
                 className={
-                  this.props.active === "myninjas"
+                  this.props.active === "mentors"
                     ? "nav-link active"
                     : "nav-link side"
                 }
-                to="/myninjas"
+                to="/mentors"
               >
-                My Ninjas
-                {this.props.active === "myninjas" ? (
+                Mentors
+                {this.props.active === "mentors" ? (
                   <span className="sr-only">(current)</span>
                 ) : null}
               </NavLink>

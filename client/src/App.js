@@ -55,6 +55,7 @@ const Content = () => (
     <PrivateRoute exact path="/mentors" component={Mentors} />
     <PrivateRoute exact path="/guardians" component={Guardians} />
     <PrivateRoute exact path="/myninjas" component={MyNinjas} />
+    <PrivateRoute exact path="/profile" component={Profile} />
     <PrivateRoute exact path="/user/:id" component={withRouter(Profile)} />
   </Switch>
 );

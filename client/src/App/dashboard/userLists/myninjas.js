@@ -30,12 +30,13 @@ class MyNinjas extends Component {
 
   getNinjas() {
     axios
-      .post("/api/dashboard/getList", {
+      .post("/api/dashboard/getMyNinjas", {
         token: sessionStorage.getItem("id"),
-        position: "ninja"
+        id: this.props.user.userID
       })
       .then(res => {
         var ninjas = res.data;
+        console.log(ninjas);
         if (ninjas.success === true && this._isMounted === true) {
           ninjas.users.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
           this.setState({ ...this.state, ninjas: ninjas.users });

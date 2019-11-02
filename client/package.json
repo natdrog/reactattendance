@@ -19,7 +19,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://cdattendance1.localtunnel.me",
+  "proxy": "https://cdattendance.localtunnel.me",
   "browserslist": {
     "production": [
       ">0.2%",

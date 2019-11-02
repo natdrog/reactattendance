@@ -44,7 +44,7 @@ class Home extends Component {
             </div>
             <div className="col-md-1 offset-md-1 text-center">
               <a
-                href="http://cdattendance1.localtunnel.me/api/dashboard/auth"
+                href="http://cdattendance.localtunnel.me/api/dashboard/auth"
                 onClick={this.redirectLogin}
               >
                 <p>Login</p>
@@ -103,7 +103,7 @@ class Home extends Component {
         <div id="login">
           <div className="row">
             <div className="col-md-4 offset-md-4 text-center">
-              <a href="http://888218f9.ngrok.io/api/dashboard/auth">
+              <a href="http://cdattendance.localtunnel.me/api/dashboard/auth">
                 <button
                   type="button"
                   className="btn btn-dark btn-lg btn-block"

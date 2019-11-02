@@ -41,6 +41,7 @@ router.post("/createUser", async (req, res) => {
   }
 });
 
+
 async function checkToken(token) {
   return await jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err === null) {
