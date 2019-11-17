@@ -5,12 +5,8 @@ import Sidebar from "./components/sidebar";
 import LoginCard from "./components/cards/login";
 import AttendanceHistoryCard from "./components/cards/attendance-history";
 import AttendanceCode from "./components/cards/attend-code";
-import {
-  setFirstName,
-  setLastName,
-  setRank,
-  setUserID
-} from "../actions/user-actions";
+import { setCurrentUser } from "../actions/user-actions";
+import { addUser } from "../actions/users-actions";
 import axios from "axios";
 import "./resources/style.css";
 import permissions from "./permissions";
@@ -22,7 +18,7 @@ class Dashboard extends Component {
     };
     this.getInfo = this.getInfo.bind(this);
     this.getAttendCode = this.getAttendCode.bind(this);
-    if (this.props.user.firstName === "") {
+    if (this.props.user.firstName === undefined) {
       this.getInfo();
     }
     this.getAttendCode();
@@ -36,10 +32,9 @@ class Dashboard extends Component {
       .then(res => {
         var info = res.data;
         if (info !== false) {
-          this.onSetFirstName(info.firstName);
-          this.onSetLastName(info.lastName);
-          this.onSetRank(info.position);
-          this.onSetUserID(info.id);
+          this.onSetCurrentUser(info.id);
+          this.onAddUser({ [info.id]: info });
+          this.setState({ ...this.state });
         }
       });
   }
@@ -57,42 +52,42 @@ class Dashboard extends Component {
       });
   }
 
-  onSetFirstName(firstName) {
-    this.props.onSetFirstName(firstName);
+  onSetCurrentUser(userID) {
+    this.props.onSetCurrentUser(userID);
   }
-  onSetLastName(lastName) {
-    this.props.onSetLastName(lastName);
-  }
-  onSetRank(rank) {
-    this.props.onSetRank(rank);
-  }
-  onSetUserID(userID) {
-    this.props.onSetUserID(userID);
+  onAddUser(user) {
+    this.props.onAddUser(user);
   }
 
   render() {
-    if (this.props.user.userID === "") {
+    if (this.props.users[this.props.user] === undefined) {
       return <Loading />;
     } else {
       return (
         <div className="container-fluid">
           <Sidebar active="dashboard" />
           <main className="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
-            <h1>Welcome {this.props.user.firstName}!</h1>
+            <h1>Welcome {this.props.users[this.props.user].firstName}!</h1>
             <hr />
             <div className="container-fluid">
               <div className="row">
-                {permissions.canSignIn.includes(this.props.user.rank) ? (
+                {permissions.canSignIn.includes(
+                  this.props.users[this.props.user].position
+                ) ? (
                   <div className="col-md-6 dashcomp">
                     <LoginCard />
                   </div>
                 ) : null}
-                {permissions.canSignIn.includes(this.props.user.rank) ? (
+                {permissions.canSignIn.includes(
+                  this.props.users[this.props.user].position
+                ) ? (
                   <div className="col-md-6 dashcomp">
                     <AttendanceHistoryCard />
                   </div>
                 ) : null}
-                {permissions.canSeeWeekCode.includes(this.props.user.rank) ? (
+                {permissions.canSeeWeekCode.includes(
+                  this.props.users[this.props.user].position
+                ) ? (
                   <div className="col-md-6 dashcomp">
                     <AttendanceCode code={this.state.weekCode} />
                   </div>
@@ -110,13 +105,8 @@ const mapStateToProps = state => {
   return state;
 };
 const mapActionsToProps = {
-  onSetFirstName: setFirstName,
-  onSetLastName: setLastName,
-  onSetRank: setRank,
-  onSetUserID: setUserID
+  onSetCurrentUser: setCurrentUser,
+  onAddUser: addUser
 };
 
-export default connect(
-  mapStateToProps,
-  mapActionsToProps
-)(Dashboard);
+export default connect(mapStateToProps, mapActionsToProps)(Dashboard);

@@ -17,7 +17,7 @@ class NinjaSignup extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     window.sessionStorage.removeItem("redirect");
   }
 

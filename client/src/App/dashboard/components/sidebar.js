@@ -7,7 +7,6 @@ import permissions from "../permissions";
 
 class Sidebar extends Component {
   render() {
-    console.log(this.props.active);
     return (
       <nav className="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
         <a className="navbar-brand" href="/">
@@ -39,7 +38,7 @@ class Sidebar extends Component {
               to={{
                 pathname: "/profile",
                 state: {
-                  id: this.props.user.userID
+                  id: this.props.user
                 }
               }}
             >
@@ -50,7 +49,7 @@ class Sidebar extends Component {
             </NavLink>
           </li>
 
-          {permissions.canSeeMyNinjas.includes(this.props.user.rank) ? (
+          {permissions.canSeeMyNinjas.includes(this.props.users[this.props.user].position) ? (
             <li className="nav-item">
               <NavLink
                 className={
@@ -68,7 +67,7 @@ class Sidebar extends Component {
             </li>
           ) : null}
 
-          {permissions.canSeeNinjaProfile.includes(this.props.user.rank) ? (
+          {permissions.canSeeNinjaProfile.includes(this.props.users[this.props.user].position) ? (
             <li className="nav-item">
               <NavLink
                 className={
@@ -86,7 +85,7 @@ class Sidebar extends Component {
             </li>
           ) : null}
 
-          {permissions.canSeeGuardianProfile.includes(this.props.user.rank) ? (
+          {permissions.canSeeGuardianProfile.includes(this.props.users[this.props.user].position) ? (
             <li className="nav-item">
               <NavLink
                 className={
@@ -104,7 +103,7 @@ class Sidebar extends Component {
             </li>
           ) : null}
 
-          {permissions.canSeeMentorProfile.includes(this.props.user.rank) ? (
+          {permissions.canSeeMentorProfile.includes(this.props.users[this.props.user].position) ? (
             <li className="nav-item">
               <NavLink
                 className={
@@ -122,7 +121,7 @@ class Sidebar extends Component {
             </li>
           ) : null}
 
-          {permissions.canSeeAnalytics.includes(this.props.user.rank) ? (
+          {permissions.canSeeAnalytics.includes(this.props.users[this.props.user].position) ? (
             <li className="nav-item">
               <NavLink
                 className={

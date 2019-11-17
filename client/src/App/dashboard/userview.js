@@ -7,6 +7,8 @@ import placeholder from "./resources/profile.svg";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+import permissions from "./permissions";
+
 class Profile extends Component {
   _isMounted = false;
 
@@ -27,35 +29,39 @@ class Profile extends Component {
   }
   componentDidMount() {
     this._isMounted = true;
-    console.log(this.props.match.params);
-    if (this.props.location.state !== undefined) {
-      this.getUser(this.props.location.state.id);
-    } else {
-      this.getUser(this.props.match.params.id);
+    if (this._isMounted) {
+      this.setState({ ...this.state, user: this.props.location.state.user });
     }
+    this.getUser();
   }
   componentWillUnmount() {
     this._isMounted = false;
   }
 
-  redirect(id) {
-    this.props.history.push(`/user/${id}`);
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.user !== this.props.location.state.user) {
+      if (this._isMounted) {
+        this.setState({
+          ...this.state,
+          user: this.props.location.state.user,
+          info: [],
+          relationships: []
+        });
+      }
+      this.getUser();
+    }
   }
 
-  getUser(id) {
+  getUser() {
     axios
-      .post("/api/dashboard/getUser", {
+      .post("/api/dashboard/getRels", {
         token: sessionStorage.getItem("id"),
-        id,
-        relationships: true
+        id: this.props.location.state.user.id
       })
       .then(res => {
         var user = res.data;
+        console.log(user);
         if (user.success === true && this._isMounted === true) {
-          this.setState({
-            ...this.state,
-            user: user.user
-          });
           user.relationships.sort(
             (a, b) => parseFloat(a.id) - parseFloat(b.id)
           );
@@ -63,7 +69,6 @@ class Profile extends Component {
             ...this.state,
             relationships: user.relationships
           });
-          console.log(this.state.relationships);
         }
       });
   }
@@ -76,9 +81,11 @@ class Profile extends Component {
   }
 
   render() {
+    console.log(this.state);
     if (this.state.user.id === undefined) {
       return <Loading />;
     } else {
+      console.log(this.state.relationships);
       return (
         <div className="container-fluid">
           {this.props.user.userID === this.state.user.id ? (
@@ -98,45 +105,45 @@ class Profile extends Component {
                 </div>
               </div>
               <hr />
-              <h2>Relationships:</h2>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Relationship</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.relationships.map(rel => (
-                    <tr key={rel.person2.id}>
-                      <th scope="row">{rel.person2.id}</th>
-                      <td>{`${rel.person2.firstName} ${rel.person2.lastName}`}</td>
-                      <td>{rel.relationTo}</td>
-                      <td>
-                        <Link
-                          to={{
-                            pathname: "/userview",
-                            state: {
-                              user: rel.person2
-                            }
-                          }}
-                        >
-                          <button>View Profile</button>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {permissions.canSeeNinjaProfile.includes(this.props.user.rank) ? (
+                <>
+                  <h2>Relationships:</h2>
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Relationship</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.relationships.map(rel => (
+                        <tr key={rel.person2.id}>
+                          <th scope="row">{rel.person2.id}</th>
+                          <td>{`${rel.person2.firstName} ${rel.person2.lastName}`}</td>
+                          <td>{rel.relationTo}</td>
+                          <td>
+                            <Link
+                              to={{
+                                pathname: "/userview",
+                                state: {
+                                  user: rel.person2
+                                }
+                              }}
+                            >
+                              <button>View Profile</button>
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </>
+              ) : (
+                <></>
+              )}
             </div>
-            <UserAttend
-              id={
-                this.props.location.state !== undefined
-                  ? this.props.location.state.id
-                  : this.props.location.state.id
-              }
-            />
+            {true ? <UserAttend id={this.props.location.state.user.id} />: <UserAttend id={this.props.location.state.user.id} /> }
           </main>
         </div>
       );

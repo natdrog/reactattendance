@@ -3,13 +3,13 @@ import axios from "axios";
 import variables from "../../variables";
 
 class UserAttend extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
       attends: []
     };
     this.getAttendance = this.getAttendance.bind(this);
-    this.getAttendance();
   }
   getAttendance() {
     axios
@@ -19,7 +19,7 @@ class UserAttend extends Component {
       })
       .then(res => {
         var attends = res.data;
-        if (attends.success === true) {
+        if (attends.success === true && this._isMounted) {
           attends.attends.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
           this.setState({
             ...this.state,
@@ -27,6 +27,14 @@ class UserAttend extends Component {
           });
         }
       });
+  }
+  componentDidMount() {
+    this._isMounted = true;
+    this.getAttendance();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {

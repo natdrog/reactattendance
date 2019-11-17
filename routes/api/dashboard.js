@@ -58,6 +58,22 @@ router.post("/getUser", async (req, res) => {
   }
 });
 
+router.post("/getRels", async (req, res) => {
+  token = await checkToken(req.body.token);
+  if (!token) {
+    res.end('{"success": false, "err": "Token is undefined"}');
+  } else {
+    relationships = await getRelationships(req.body.id);
+    if (relationships.err === undefined) {
+      res.end(
+        `{"success": true, "relationships": ${JSON.stringify(relationships)}}`
+      );
+    } else {
+      res.end(`{"success": false, "err": ${relationships.err}}`);
+    }
+  }
+});
+
 async function getRelationships(id) {
   return await db.Relationship.findAll({
     include: [
@@ -67,9 +83,13 @@ async function getRelationships(id) {
       }
     ],
     where: { person1Id: id }
-  }).then(rels => {
-    return rels;
-  });
+  })
+    .then(rels => {
+      return rels;
+    })
+    .catch(err => {
+      return { err: err };
+    });
 }
 
 router.post("/getMyNinjas", async (req, res) => {
@@ -87,13 +107,17 @@ router.post("/getMyNinjas", async (req, res) => {
         },
         { model: db.User, as: "person1" }
       ]
-    }).then(relusr => {
-      var users = [];
-      for (i = 0; i < relusr.length; i++) {
-        users.push(relusr[i].person1);
-      }
-      res.end(`{"success": true, "users": ${JSON.stringify(users)}}`);
-    });
+    })
+      .then(relusr => {
+        var users = [];
+        for (i = 0; i < relusr.length; i++) {
+          users.push(relusr[i].person1);
+        }
+        res.end(`{"success": true, "users": ${JSON.stringify(users)}}`);
+      })
+      .catch(err => {
+        res.end(`{"success": false, "users": ${err}}`);
+      });
   }
 });
 

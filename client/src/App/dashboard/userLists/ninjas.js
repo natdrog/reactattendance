@@ -69,7 +69,10 @@ class Ninjas extends Component {
                   {this.state.ninjas.map(ninja => (
                     <tr
                       onClick={() =>
-                        this.props.history.push(`/user/${ninja.id}`)
+                        this.props.history.push({
+                          pathname: "/userview",
+                          state: { state: ninja }
+                        })
                       }
                       key={ninja.id}
                     >

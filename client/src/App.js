@@ -17,6 +17,7 @@ import Mentors from "./App/dashboard/userLists/mentors";
 import Guardians from "./App/dashboard/userLists/guardians";
 import MyNinjas from "./App/dashboard/userLists/myninjas";
 import Profile from "./App/dashboard/profile";
+import UserView from "./App/dashboard/userview";
 
 class App extends Component {
   render() {
@@ -56,6 +57,7 @@ const Content = () => (
     <PrivateRoute exact path="/guardians" component={Guardians} />
     <PrivateRoute exact path="/myninjas" component={MyNinjas} />
     <PrivateRoute exact path="/profile" component={Profile} />
+    <PrivateRoute exact path="/userview" component={UserView} />
     <PrivateRoute exact path="/user/:id" component={withRouter(Profile)} />
   </Switch>
 );

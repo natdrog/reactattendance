@@ -22,33 +22,37 @@ router.post("/attend", async (req, res) => {
     console.log("{ success: false, err: 'Token is undefined', errno: '0' }");
     res.end("{ success: false, err: 'Token is undefined', errno: '0' }");
   } else {
-    db.WeekCode.findOne({ where: { code: weekCode } }).then(found => {
-      if (found === null) {
-        console.log("Not found");
-        res.end("{ success: false, err: 'Invalid Code', errno: '1' }");
-      } else {
-        console.log("week code found");
-        if (found.dataValues.date == now) {
-          console.log("week code correct date");
-          db.User.findOne({ where: { slackID: token } })
-            .then(user => {
-              db.Attendance.findOrCreate({
-                where: { date: now, attendeeId: user.id },
-                defaults: {
-                  date: now,
-                  locationId: found.dataValues.DojoId,
-                  attendeeId: user.id
-                }
-              }).then(created => {
-                res.end('{"success": true}');
+    db.WeekCode.findOne({ where: { code: weekCode } })
+      .then(found => {
+        if (found === null) {
+          console.log("Not found");
+          res.end("{ success: false, err: 'Invalid Code', errno: '1' }");
+        } else {
+          console.log("week code found");
+          if (found.dataValues.date == now) {
+            console.log("week code correct date");
+            db.User.findOne({ where: { slackID: token } })
+              .then(user => {
+                db.Attendance.findOrCreate({
+                  where: { date: now, attendeeId: user.id },
+                  defaults: {
+                    date: now,
+                    locationId: found.dataValues.DojoId,
+                    attendeeId: user.id
+                  }
+                }).then(created => {
+                  res.end('{"success": true}');
+                });
+              })
+              .catch(err => {
+                res.end(`{ success: 'false', err: ${err} }`);
               });
-            })
-            .catch(err => {
-              res.end(`{ success: 'false', err: ${err} }`);
-            });
+          }
         }
-      }
-    });
+      })
+      .catch(err => {
+        res.end(`{ success: 'false', err: ${err} }`);
+      });
   }
 });
 
@@ -57,11 +61,13 @@ router.post("/getAttends", async (req, res) => {
   if (!token) {
     res.end('{"success": false, "err": "Token is undefined"}');
   } else {
-    db.Attendance.findAll({ where: { attendeeId: req.body.id } }).then(
-      attends => {
+    db.Attendance.findAll({ where: { attendeeId: req.body.id } })
+      .then(attends => {
         res.end(`{"success": true, "attends": ${JSON.stringify(attends)}}`);
-      }
-    );
+      })
+      .catch(err => {
+        res.end(`{ success: 'false', err: ${err} }`);
+      });
   }
 });
 
@@ -74,11 +80,17 @@ router.post("/getWeekCode", async (req, res) => {
     db.WeekCode.findOrCreate({
       where: { date: now },
       defaults: { date: now, code: tempcode, DojoId: "1" }
-    }).then(code => {
-      res.end(
-        `{"success": true, "code": ${JSON.stringify(code[0].dataValues.code)}}`
-      );
-    });
+    })
+      .then(code => {
+        res.end(
+          `{"success": true, "code": ${JSON.stringify(
+            code[0].dataValues.code
+          )}}`
+        );
+      })
+      .catch(err => {
+        res.end(`{ success: 'false', err: ${err} }`);
+      });
   }
 });
 

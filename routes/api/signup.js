@@ -22,25 +22,34 @@ router.post("/createUser", async (req, res) => {
         birthday: user.birthday,
         position: user.position
       }
-    }).then(createdUser => {
-      console.log(createdUser);
-    });
-    User.findOne({ slack_ID: user.slack_ID }).then(check => {
-      if (check !== null) {
-        console.log("Slack in Use");
-        res.end(
-          JSON.stringify({ success: "false", err: "Slack in Use", errno: "1" })
-        );
-      } else {
-        const newUser = new User(user);
-        newUser.save().then(userinfo => {
-          console.log(userinfo);
-        });
-      }
-    });
+    })
+      .then(createdUser => {
+        console.log(createdUser);
+      })
+      .catch(err => res.end(`{ success: 'false', err: ${err} }`));
+    User.findOne({ slack_ID: user.slack_ID })
+      .then(check => {
+        if (check !== null) {
+          console.log("Slack in Use");
+          res.end(
+            JSON.stringify({
+              success: "false",
+              err: "Slack in Use",
+              errno: "1"
+            })
+          );
+        } else {
+          const newUser = new User(user);
+          newUser.save().then(userinfo => {
+            console.log(userinfo);
+          });
+        }
+      })
+      .catch(err => {
+        res.end(`{ success: 'false', err: ${err} }`);
+      });
   }
 });
-
 
 async function checkToken(token) {
   return await jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
