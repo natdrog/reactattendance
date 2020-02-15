@@ -7,31 +7,30 @@ import placeholder from "./resources/profile.svg";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+import { addUser } from "../actions/users-actions";
+import { addRel } from "../actions/relationships-actions";
+
 class Profile extends Component {
   _isMounted = false;
 
   constructor(props) {
     super(props);
     this.state = {
-      info: [],
-      user: [],
-      relationships: []
+      loading: true
     };
     if (window.performance) {
-      if (performance.navigation.type === 1 && this.props.user.userID === "") {
+      if (performance.navigation.type === 1 && this.props.user === 0) {
         this.props.history.push("/dashboard");
       }
     }
     this.getUser = this.getUser.bind(this);
+    this.checkLoad = this.checkLoad.bind(this);
     this.calculateAge = this.calculateAge.bind(this);
   }
   componentDidMount() {
     this._isMounted = true;
-    console.log(this.props.match.params);
-    if (this.props.location.state !== undefined) {
-      this.getUser(this.props.location.state.id);
-    } else {
-      this.getUser(this.props.match.params.id);
+    if (this.props.user !== undefined) {
+      this.getUser(this.props.user);
     }
   }
   componentWillUnmount() {
@@ -42,30 +41,48 @@ class Profile extends Component {
     this.props.history.push(`/user/${id}`);
   }
 
+  checkLoad() {
+    var found = false;
+    for (var i = 0; i < this.props.rel.length; i++) {
+      if (this.props.rel[i].person1Id === this.props.user) {
+        found = true;
+        break;
+      }
+    }
+    return found;
+  }
+
   getUser(id) {
-    axios
-      .post("/api/dashboard/getUser", {
-        token: sessionStorage.getItem("id"),
-        id,
-        relationships: true
-      })
-      .then(res => {
-        var user = res.data;
-        if (user.success === true && this._isMounted === true) {
-          this.setState({
-            ...this.state,
-            user: user.user
-          });
-          user.relationships.sort(
-            (a, b) => parseFloat(a.id) - parseFloat(b.id)
-          );
-          this.setState({
-            ...this.state,
-            relationships: user.relationships
-          });
-          console.log(this.state.relationships);
-        }
+    if (!this.checkLoad()) {
+      axios
+        .post("/api/dashboard/getUser", {
+          token: sessionStorage.getItem("id"),
+          id,
+          relationships: true
+        })
+        .then(res => {
+          var user = res.data;
+          if (user.success === true && this._isMounted === true) {
+            user.relationships.map(val => {
+              this.onAddRel({
+                person1Id: val.person1Id,
+                person2Id: val.person2Id,
+                relationTo: val.relationTo
+              });
+              this.onAddUser({ [val.person2.id]: val.person2 });
+              return null;
+            });
+            this.setState({
+              loading: false
+            });
+          }
+        });
+    } else {
+      this.setState({
+        ...this.state,
+        loading: false
       });
+    }
   }
   calculateAge(dob) {
     if (dob !== undefined) {
@@ -75,17 +92,20 @@ class Profile extends Component {
     }
   }
 
+  onAddUser(user) {
+    this.props.onAddUser(user);
+  }
+  onAddRel(rel) {
+    this.props.onAddRel(rel);
+  }
+
   render() {
-    if (this.state.user.id === undefined) {
+    if (this.state.loading === true) {
       return <Loading />;
     } else {
       return (
         <div className="container-fluid">
-          {this.props.user.userID === this.state.user.id ? (
-            <Sidebar active="profile" />
-          ) : (
-            <Sidebar active="ninjas" />
-          )}
+          <Sidebar active="profile" />
           <main className="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
             <h1>Profile:</h1>
             <hr />
@@ -93,8 +113,15 @@ class Profile extends Component {
               <div className="row">
                 <img alt="" src={placeholder} />
                 <div>
-                  <h3>{`${this.state.user.firstName} ${this.state.user.lastName}`}</h3>
-                  <h4>Age: {this.calculateAge(this.state.user.birthday)}</h4>
+                  <h3>{`${this.props.users[this.props.user].firstName} ${
+                    this.props.users[this.props.user].lastName
+                  }`}</h3>
+                  <h4>
+                    Age:{" "}
+                    {this.calculateAge(
+                      this.props.users[this.props.user].birthday
+                    )}
+                  </h4>
                 </div>
               </div>
               <hr />
@@ -108,35 +135,30 @@ class Profile extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.relationships.map(rel => (
-                    <tr key={rel.person2.id}>
-                      <th scope="row">{rel.person2.id}</th>
-                      <td>{`${rel.person2.firstName} ${rel.person2.lastName}`}</td>
-                      <td>{rel.relationTo}</td>
-                      <td>
-                        <Link
-                          to={{
-                            pathname: "/userview",
-                            state: {
-                              user: rel.person2
-                            }
-                          }}
-                        >
-                          <button>View Profile</button>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
+                  {this.props.rel.map(rel => {
+                    if (rel.person1Id === this.props.user) {
+                      return (
+                        <tr key={rel.person2Id}>
+                          <th scope="row">{rel.person2Id}</th>
+                          <td>{`${this.props.users[rel.person2Id].firstName} ${
+                            this.props.users[rel.person2Id].lastName
+                          }`}</td>
+                          <td>{rel.relationTo}</td>
+                          <td>
+                            <Link to={`/user/${rel.person2Id}`}>
+                              <button>View Profile</button>
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
                 </tbody>
               </table>
             </div>
-            <UserAttend
-              id={
-                this.props.location.state !== undefined
-                  ? this.props.location.state.id
-                  : this.props.location.state.id
-              }
-            />
+            <UserAttend id={this.props.user} />
           </main>
         </div>
       );
@@ -147,4 +169,10 @@ class Profile extends Component {
 const mapStateToProps = state => {
   return state;
 };
-export default connect(mapStateToProps)(Profile);
+
+const mapActionsToProps = {
+  onAddUser: addUser,
+  onAddRel: addRel
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Profile);

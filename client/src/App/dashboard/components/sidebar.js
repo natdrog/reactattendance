@@ -49,7 +49,9 @@ class Sidebar extends Component {
             </NavLink>
           </li>
 
-          {permissions.canSeeMyNinjas.includes(this.props.users[this.props.user].position) ? (
+          {permissions.canSeeMyNinjas.includes(
+            this.props.users[this.props.user].position
+          ) ? (
             <li className="nav-item">
               <NavLink
                 className={
@@ -67,7 +69,9 @@ class Sidebar extends Component {
             </li>
           ) : null}
 
-          {permissions.canSeeNinjaProfile.includes(this.props.users[this.props.user].position) ? (
+          {permissions.canSeeNinjaProfile.includes(
+            this.props.users[this.props.user].position
+          ) ? (
             <li className="nav-item">
               <NavLink
                 className={
@@ -85,7 +89,9 @@ class Sidebar extends Component {
             </li>
           ) : null}
 
-          {permissions.canSeeGuardianProfile.includes(this.props.users[this.props.user].position) ? (
+          {permissions.canSeeGuardianProfile.includes(
+            this.props.users[this.props.user].position
+          ) ? (
             <li className="nav-item">
               <NavLink
                 className={
@@ -103,7 +109,9 @@ class Sidebar extends Component {
             </li>
           ) : null}
 
-          {permissions.canSeeMentorProfile.includes(this.props.users[this.props.user].position) ? (
+          {permissions.canSeeMentorProfile.includes(
+            this.props.users[this.props.user].position
+          ) ? (
             <li className="nav-item">
               <NavLink
                 className={
@@ -121,7 +129,9 @@ class Sidebar extends Component {
             </li>
           ) : null}
 
-          {permissions.canSeeAnalytics.includes(this.props.users[this.props.user].position) ? (
+          {permissions.canSeeAnalytics.includes(
+            this.props.users[this.props.user].position
+          ) ? (
             <li className="nav-item">
               <NavLink
                 className={

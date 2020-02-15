@@ -4,7 +4,7 @@
   "description": "Coderdojo attendance program built in react",
   "main": "server.js",
   "scripts": {
-    "start": "concurrently \"node server.js\" \"lt --subdomain cdattend --port 5000\"",
+    "start": "concurrently \"node server.js\" \"lt -h https://tunnel.datahub.at --subdomain cdattend --port 5000\"",
     "server": "nodemon server.js",
     "client-install": "npm install --prefix client",
     "client": "npm start --prefix client",

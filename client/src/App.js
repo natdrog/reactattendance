@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Redirect,
-  withRouter
-} from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App/dashboard/resources/style.css";
 import Home from "./App/pages/landing";
@@ -58,7 +52,7 @@ const Content = () => (
     <PrivateRoute exact path="/myninjas" component={MyNinjas} />
     <PrivateRoute exact path="/profile" component={Profile} />
     <PrivateRoute exact path="/userview" component={UserView} />
-    <PrivateRoute exact path="/user/:id" component={withRouter(Profile)} />
+    <PrivateRoute path="/user/:id" component={UserView} />
   </Switch>
 );
 export default App;

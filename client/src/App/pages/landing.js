@@ -44,7 +44,7 @@ class Home extends Component {
             </div>
             <div className="col-md-1 offset-md-1 text-center">
               <a
-                href="http://cdattend.localtunnel.me/api/dashboard/auth"
+                href="https://cdattend.tunnel.datahub.at/api/dashboard/auth"
                 onClick={this.redirectLogin}
               >
                 <p>Login</p>
