@@ -3,21 +3,25 @@ import { connect } from "react-redux";
 import Loading from "../components/misc/loading";
 import Sidebar from "../components/sidebar";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
+import { addUser } from "../../actions/users-actions";
 
 class Mentors extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
-      mentors: []
+      loading: true
     };
     if (window.performance) {
-      if (performance.navigation.type === 1 && this.props.user.userID === "") {
+      if (performance.navigation.type === 1 && this.props.user === 0) {
         this.props.history.push("/dashboard");
       }
     }
     this.getMentors = this.getMentors.bind(this);
-    this.redirect = this.redirect.bind(this);
+    console.log(this.props.users);
   }
 
   componentDidMount() {
@@ -26,6 +30,9 @@ class Mentors extends Component {
   }
   componentWillUnmount() {
     this._isMounted = false;
+  }
+  onAddUser(user) {
+    this.props.onAddUser(user);
   }
 
   getMentors() {
@@ -37,8 +44,14 @@ class Mentors extends Component {
       .then(res => {
         var mentors = res.data;
         if (mentors.success === true && this._isMounted === true) {
-          mentors.users.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
-          this.setState({ ...this.state, mentors: mentors.users });
+          mentors.users.map(val => {
+            this.onAddUser({ [val.id]: val });
+            return null;
+          });
+          this.setState({
+            ...this.state,
+            loading: false
+          });
         }
       });
   }
@@ -47,7 +60,7 @@ class Mentors extends Component {
   }
 
   render() {
-    if (!this.state.mentors.length) {
+    if (this.state.loading) {
       return <Loading />;
     } else {
       return (
@@ -61,23 +74,34 @@ class Mentors extends Component {
                 <thead className="thead-dark">
                   <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Profile</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.mentors.map(mentor => (
-                    <tr
-                      onClick={() =>
-                        this.props.history.push(`/user/${mentor.id}`)
-                      }
-                      key={mentor.id}
-                    >
-                      <th scope="row">{mentor.id}</th>
-                      <td>{mentor.firstName}</td>
-                      <td>{mentor.lastName}</td>
-                    </tr>
-                  ))}
+                  {Object.entries(this.props.users).map(user => {
+                    if (user[1].position === "mentor") {
+                      return (
+                        <tr key={user[1].id}>
+                          <th scope="row">{user[1].id}</th>
+                          <td>{`${user[1].firstName} ${user[1].lastName}`}</td>
+                          <td>
+                            <Link
+                              to={
+                                user[1].id === this.props.user
+                                  ? "/profile"
+                                  : `/user/${user[1].id}`
+                              }
+                            >
+                              <button>View Profile</button>
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
                 </tbody>
               </table>
             </div>
@@ -91,4 +115,7 @@ class Mentors extends Component {
 const mapStateToProps = state => {
   return state;
 };
-export default connect(mapStateToProps)(Mentors);
+const mapActionsToProps = {
+  onAddUser: addUser
+};
+export default connect(mapStateToProps, mapActionsToProps)(Mentors);

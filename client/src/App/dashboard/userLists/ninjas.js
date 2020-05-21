@@ -3,21 +3,25 @@ import { connect } from "react-redux";
 import Loading from "../components/misc/loading";
 import Sidebar from "../components/sidebar";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
+import { addUser } from "../../actions/users-actions";
 
 class Ninjas extends Component {
   _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
-      ninjas: []
+      loading: true
     };
     if (window.performance) {
-      if (performance.navigation.type === 1 && this.props.user.userID === "") {
+      if (performance.navigation.type === 1 && this.props.user === 0) {
         this.props.history.push("/dashboard");
       }
     }
     this.getNinjas = this.getNinjas.bind(this);
-    this.redirect = this.redirect.bind(this);
+    console.log(this.props.users);
   }
 
   componentDidMount() {
@@ -26,6 +30,9 @@ class Ninjas extends Component {
   }
   componentWillUnmount() {
     this._isMounted = false;
+  }
+  onAddUser(user) {
+    this.props.onAddUser(user);
   }
 
   getNinjas() {
@@ -37,17 +44,20 @@ class Ninjas extends Component {
       .then(res => {
         var ninjas = res.data;
         if (ninjas.success === true && this._isMounted === true) {
-          ninjas.users.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
-          this.setState({ ...this.state, ninjas: ninjas.users });
+          ninjas.users.map(val => {
+            this.onAddUser({ [val.id]: val });
+            return null;
+          });
+          this.setState({
+            ...this.state,
+            loading: false
+          });
         }
       });
   }
-  redirect(id) {
-    this.props.history.push(`/user/${id}`);
-  }
 
   render() {
-    if (!this.state.ninjas.length) {
+    if (this.state.loading) {
       return <Loading />;
     } else {
       return (
@@ -61,26 +71,34 @@ class Ninjas extends Component {
                 <thead className="thead-dark">
                   <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Profile</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.ninjas.map(ninja => (
-                    <tr
-                      onClick={() =>
-                        this.props.history.push({
-                          pathname: "/userview",
-                          state: { state: ninja }
-                        })
-                      }
-                      key={ninja.id}
-                    >
-                      <th scope="row">{ninja.id}</th>
-                      <td>{ninja.firstName}</td>
-                      <td>{ninja.lastName}</td>
-                    </tr>
-                  ))}
+                  {Object.entries(this.props.users).map(user => {
+                    if (user[1].position === "ninja") {
+                      return (
+                        <tr key={user[1].id}>
+                          <th scope="row">{user[1].id}</th>
+                          <td>{`${user[1].firstName} ${user[1].lastName}`}</td>
+                          <td>
+                            <Link
+                              to={
+                                user[1].id === this.props.user
+                                  ? "/profile"
+                                  : `/user/${user[1].id}`
+                              }
+                            >
+                              <button>View Profile</button>
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
                 </tbody>
               </table>
             </div>
@@ -94,4 +112,7 @@ class Ninjas extends Component {
 const mapStateToProps = state => {
   return state;
 };
-export default connect(mapStateToProps)(Ninjas);
+const mapActionsToProps = {
+  onAddUser: addUser
+};
+export default connect(mapStateToProps, mapActionsToProps)(Ninjas);

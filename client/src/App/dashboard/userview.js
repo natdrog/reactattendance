@@ -38,10 +38,6 @@ class Profile extends Component {
     this._isMounted = false;
   }
 
-  redirect(id) {
-    this.props.history.push(`/user/${id}`);
-  }
-
   componentDidUpdate(prevProps) {
     if (this.props.match.params.id !== prevProps.match.params.id) {
       this.setState({

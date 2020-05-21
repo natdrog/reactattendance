@@ -20,7 +20,9 @@ class UserAttend extends Component {
       .then(res => {
         var attends = res.data;
         if (attends.success === true && this._isMounted) {
-          attends.attends.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
+          attends.attends
+            .sort((a, b) => parseFloat(a.id) - parseFloat(b.id))
+            .reverse();
           this.setState({
             ...this.state,
             attends: attends.attends

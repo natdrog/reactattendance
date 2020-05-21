@@ -19,7 +19,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://cdattend.tunnel.datahub.at",
+  "proxy": "http://cdattend.serverless.social",
   "browserslist": {
     "production": [
       ">0.2%",
